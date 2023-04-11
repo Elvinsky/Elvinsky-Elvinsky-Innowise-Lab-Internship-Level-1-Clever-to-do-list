@@ -12,7 +12,9 @@
     <ul>
       <li
         v-for="item in items"
+        :id="item.id"
         :key="item.id"
+        @click="removeItem($event)"
       >
         {{ item.name }} - {{ item.address }}
       </li>
@@ -22,7 +24,7 @@
 
 <script>
 import {db} from '../firebase.js'
-import { getItems,setItem } from '@/utils/utils';
+import { getItems,setItem,deleteItem } from '@/utils/utils';
 export default{
     data(){
         return{
@@ -34,8 +36,13 @@ export default{
     },
     methods:{
         addItem() {
-            setItem(db)
+            setItem(db,{name:Date.now().toString(),address:(+Date.now()+Math.random()).toString(),id:''})
+            getItems(db).then(items=>this.items=items);
         },
+        removeItem(event){
+            deleteItem(db,event.target.id)
+            getItems(db).then(items=>this.items=items);
+        }
     }
    
 }
