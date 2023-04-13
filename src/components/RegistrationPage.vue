@@ -30,9 +30,17 @@
         name="repeatPassword"
         type="password"
       >
-      <button @click="submit">
-        Submit
-      </button>
+      <div class="actions">
+        <button @click="submit">
+          Submit
+        </button>
+        <RouterLink
+          to="/login"
+          class="link"
+        >
+          Already have an account?
+        </RouterLink>
+      </div>
     </form>
   </section>
 </template>
@@ -96,5 +104,14 @@ form button{
 input{
   padding: 0.4em;
   width: 200px;
+}
+.actions{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1em;
+}
+.link{
+  font-size: 0.7em;
 }
 </style>

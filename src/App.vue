@@ -5,14 +5,21 @@
 <script>
 import {isUniqueUser} from './scripts/utils.js'
 import { db } from './firebase';
+import { setItem } from './scripts/dbScripts/crudApi';
 export default {
     name: 'App',
     components: {
     },
     methods:{
-        handleSubmitReg(data){
-            if(isUniqueUser(db,data)){
-                console.log('Is unique');
+        async handleSubmitReg(data){
+            const dataToSet={
+                username:data.name,
+                email:data.email,
+                password:data.password
+            }
+            if( (await isUniqueUser(db,data)).length===0){
+                localStorage.setItem('user',JSON.stringify(dataToSet))
+                await setItem(db,'users',dataToSet)
             }
         }
     }

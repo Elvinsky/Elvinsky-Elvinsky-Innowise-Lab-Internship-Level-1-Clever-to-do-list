@@ -1,23 +1,23 @@
 // eslint-disable-next-line max-len
 import{ collection, getDocs, addDoc, deleteDoc, setDoc, doc } from 'firebase/firestore/lite';
 
-export async function getItems(db) {
-    const itemsCol = collection(db, 'items');
+export async function getItems(db,doc) {
+    const itemsCol = collection(db, doc);
     const itemSnapshot = await getDocs(itemsCol);
     const itemList = itemSnapshot.docs.map(doc => doc.data());
     return itemList;
 }
-export async function setItem(db,data){
-    const ref = collection(db,'items');
+export async function setItem(db,item,data){
+    const ref = collection(db,item);
     let uid=''
     addDoc(ref,data).then(docRef=>{
         uid = docRef._key.path.segments[1];
-        updateItem(db,uid,{...data,id:uid})
+        updateItem(db,item,uid,{...data,id:uid})
     })
 }
 
-export async function updateItem(db, itemId, newData) {
-    const itemRef = doc(db, 'items', itemId.toString());
+export async function updateItem(db,item, itemId, newData) {
+    const itemRef = doc(db, item, itemId.toString());
     await setDoc(itemRef, newData, { merge: true });
 }
 

@@ -10,8 +10,10 @@ export const isValidCreds =(data)=>{
             }
         }
     }
+    // return true
+    alert('Error')
     return false
 }
-export const isUniqueUser = (db,data)=>{
-    whereQuery(db,'users','username',data.name).then(data=>{return data})
+export const isUniqueUser = async (db,data)=>{
+    return data = await whereQuery(db,'users','username',data.name)
 }
