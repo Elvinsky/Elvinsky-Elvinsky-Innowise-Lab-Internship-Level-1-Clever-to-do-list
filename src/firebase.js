@@ -7,12 +7,12 @@ import { getFirestore} from 'firebase/firestore/lite';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: 'AIzaSyD6Z0ScYKVdWOC6OCFbsA0T2m6M4UvlKlE',
-    authDomain: 'innowise-lab2.firebaseapp.com',
-    projectId: 'innowise-lab2',
-    storageBucket: 'innowise-lab2.appspot.com',
-    messagingSenderId: '15152612165',
-    appId: '1:15152612165:web:eb0083d897226c5b8d342c'
+    apiKey: process.env.VUE_APP_API_KEY,
+    authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+    projectId: process.env.VUE_APP_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+    appId: process.env.VUE_APP_APP_ID
 };
 
 // Initialize Firebase

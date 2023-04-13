@@ -24,7 +24,7 @@
 
 <script>
 import {db} from '../firebase.js'
-import { getItems,setItem,deleteItem } from '@/utils/utils';
+import { getItems,setItem,deleteItem } from '../scripts/dbScripts/crudApi';
 export default{
     data(){
         return{
