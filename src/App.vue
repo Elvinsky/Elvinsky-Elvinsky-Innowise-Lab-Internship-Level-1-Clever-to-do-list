@@ -1,15 +1,19 @@
 <template>
-  <RouterView @submit-creds="handleSubmit" />
+  <RouterView @submit-creds="handleSubmitReg" />
 </template>
 
 <script>
+import {isUniqueUser} from './scripts/utils.js'
+import { db } from './firebase';
 export default {
     name: 'App',
     components: {
     },
     methods:{
-        handleSubmit(data){
-            console.log(data);
+        handleSubmitReg(data){
+            if(isUniqueUser(db,data)){
+                console.log('Is unique');
+            }
         }
     }
 };

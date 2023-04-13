@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {isValidCreds} from '../utils/utils.js'
+import {isValidCreds} from '../scripts/utils.js'
 export default {    
     emits:['submit-creds'],                
     data(){
@@ -51,7 +51,6 @@ export default {
     },
     methods:{
         submit(){
-
             const data={
                 name:this.name,
                 email:this.email,
