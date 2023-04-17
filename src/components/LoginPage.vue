@@ -1,20 +1,13 @@
 <template>
   <section>
-    <h2>Registration</h2>
+    <h2>Lgin</h2>
     <form @submit.prevent>
-      <input
-        id="name"
-        v-model="name"
-        placeholder="username"
-        name="name"
-        type="text"
-      >
       <input
         id="email"
         v-model="email"
         placeholder="e-mail"
         name="email"
-        type="email"
+        type="text"
       >
       <input
         id="password"
@@ -39,32 +32,17 @@
 </template>
 
 <script>
-import {isValidCreds} from '../scripts/utils.js'
-
 export default {
-
+    emits:['on-login'],
     data(){
         return{
-            name:'',
             email:'',
             password:'',
-            repeatPassword:''
         }
     },
     methods:{
         submit(){
-            const data={
-                name:this.name,
-                email:this.email,
-                password:this.password,
-            }
-            if(isValidCreds(data)) this.$emit('submit-creds',data)
-            else{
-                this.name='',
-                this.email='',
-                this.password=''
-                return
-            }
+            this.$emit('on-login',this.email,this.password)
         }
     }
 }

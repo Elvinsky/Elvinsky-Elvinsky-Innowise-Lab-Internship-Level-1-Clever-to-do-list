@@ -1,11 +1,14 @@
 <template>
-  <RouterView @submit-creds="handleSubmitReg" />
+  <RouterView
+    @submit-creds="handleSubmitReg" 
+    @on-login="handleLogin"
+  />
 </template>
 
 <script>
 import {isUniqueUser} from './scripts/utils.js'
-import { db } from './firebase';
 import { setItem } from './scripts/dbScripts/crudApi';
+import { loginQuery } from './scripts/dbScripts/queries';
 export default {
     name: 'App',
     components: {
@@ -15,12 +18,32 @@ export default {
             const dataToSet={
                 username:data.name,
                 email:data.email,
-                password:data.password
+                password:data.password,
             }
-            if( (await isUniqueUser(db,data)).length===0){
+            if( (await isUniqueUser(data)).length===0){
                 localStorage.setItem('user',JSON.stringify(dataToSet))
-                await setItem(db,'users',dataToSet)
+                await setItem('users',dataToSet)
+                this.$router.push('/home')
+
             }
+        },
+        handleLogin(email,password){
+            loginQuery(email,password).then(data=>{
+                if(data.length!==1){
+                    return
+                }
+                else{
+                    const dataToSet ={
+                        username:data[0].username,
+                        email:data[0].email,
+                        password:data[0].password,
+                        id:data[0].id
+                    }
+                    localStorage.setItem('user',JSON.stringify(dataToSet))
+                    this.$router.push('/home')
+                }
+            })
+
         }
     }
 };
