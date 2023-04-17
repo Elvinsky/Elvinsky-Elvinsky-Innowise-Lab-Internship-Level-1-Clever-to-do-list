@@ -22,8 +22,8 @@ export async function updateItem(item, itemId, newData) {
 }
 
 
-export async function deleteItem(db, itemId) {
-    const itemRef = doc(db, 'items', itemId);
+export async function deleteItem(db,doc, itemId) {
+    const itemRef = doc(db, doc, itemId);
     await deleteDoc(itemRef);
     console.log('Document deleted with id ', itemId);
 }

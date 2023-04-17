@@ -14,21 +14,14 @@
 
 <script>
 import TodoItem from './TodoItem.vue';
-import { getTodosByDay } from '@/scripts/dbScripts/queries';
 export default {
     components: { TodoItem },
-    props:{
-        // eslint-disable-next-line vue/require-default-prop
-        user:Object
-    },
+    // eslint-disable-next-line vue/require-prop-types
+    props:['user','todos'],
     data() {
         return {
-            todos:{}
+            
         };
-    },
-    created(){
-        const userId = JSON.parse(localStorage.getItem('user')).id
-        getTodosByDay(new Date('2023-04-14'),'/users/'+userId+'/todos/').then(data=>this.todos=data)
     },
         
     methods:{

@@ -20,10 +20,8 @@ export const loginQuery = async (email,pass) => {
 export const getTodosByDay = async (date,path) => {
     const startOfDay = new Date(date.setHours(0, 0, 0, 0));
     const startSec =startOfDay.getTime()
-    console.log(startOfDay,startSec);
     const endOfDay = new Date(date.setHours(23, 59, 59, 999));
     const endSec =endOfDay.getTime();
-    console.log(endOfDay,endSec);
     const q = query(
         collection(db, path),and(
             where('date', '>=', startSec),
