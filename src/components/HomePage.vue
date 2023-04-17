@@ -19,15 +19,21 @@
 import CalendarBar from './CalendarBar.vue';
 import TodosCollection from './TodosCollection.vue';
 import { getTodosByDay } from '@/scripts/dbScripts/queries';
+import { mapGetters } from 'vuex';
 export default {
     components: { CalendarBar, TodosCollection },
     data() {
         return {
-            user: {},
             todos:{},
             day:'14',
             month:'04'
         };
+    },
+    computed: {
+        ...mapGetters(['getUser']),
+        user() {
+            return this.getUser;
+        }
     },
     watch:{
         day(){
@@ -37,6 +43,7 @@ export default {
             getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
         }
     },
+    
     created() {
         this.user=JSON.parse(localStorage.getItem('user'))
         getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
