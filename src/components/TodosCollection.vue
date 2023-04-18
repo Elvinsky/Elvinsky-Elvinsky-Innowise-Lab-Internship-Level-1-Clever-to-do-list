@@ -20,21 +20,19 @@ export default {
     props:['user','todos'],
     data() {
         return {
-            
+
         };
-    },
-        
-    methods:{
-        
     }
 }
 </script>
 
 <style scoped>
 .todo-container{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
     border-width: 1px;
     border-color: black;
     border-radius: 5px;

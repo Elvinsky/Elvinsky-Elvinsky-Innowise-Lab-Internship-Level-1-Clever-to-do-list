@@ -1,12 +1,15 @@
 <template>
-  <section>
+  <div v-if="user===null">
+    Loading
+  </div>
+  <section v-else>
     <div class="header-wrapper">
       <h1 class="title">
         Taskker
       </h1>
     </div>
     <CalendarBar @change-date="handleChangeDate" />
-    <div>
+    <div class="todos-wrapper">
       <TodosCollection
         :user="user"
         :todos="todos"
@@ -19,20 +22,18 @@
 import CalendarBar from './CalendarBar.vue';
 import TodosCollection from './TodosCollection.vue';
 import { getTodosByDay } from '@/scripts/dbScripts/queries';
-import { mapGetters } from 'vuex';
 export default {
     components: { CalendarBar, TodosCollection },
     data() {
         return {
-            todos:{},
             day:'14',
+            todos:{},
             month:'04'
         };
     },
-    computed: {
-        ...mapGetters(['getUser']),
-        user() {
-            return this.getUser;
+    computed:{
+        user(){
+            return JSON.parse(localStorage.getItem('user'))
         }
     },
     watch:{
@@ -43,9 +44,7 @@ export default {
             getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
         }
     },
-    
     created() {
-        this.user=JSON.parse(localStorage.getItem('user'))
         getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
     },
     methods:{
@@ -60,7 +59,7 @@ export default {
 
 <style scoped>
 section{
-    width: 780px;
+    width: 580px;
     margin: auto;
     padding: 1em;
 
@@ -77,5 +76,8 @@ section{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.todos-wrapper{
+  align-self: start;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <RouterView
-    @submit-creds="handleSubmitReg" 
+    :user="user"
+    @submit-creds="handleSubmitReg"
     @on-login="handleLogin"
   />
 </template>
@@ -11,21 +12,25 @@ import { setItem } from './scripts/dbScripts/crudApi';
 import { loginQuery } from './scripts/dbScripts/queries';
 export default {
     name: 'App',
-    components: {
+    data(){
+        return{
+            user: JSON.parse(localStorage.getItem('user'))
+        }
     },
     methods:{
-        async handleSubmitReg(data){
+        handleSubmitReg(data){
             const dataToSet={
                 username:data.name,
                 email:data.email,
                 password:data.password,
+                id:data.id
             }
-            if( (await isUniqueUser(data)).length===0){
-                localStorage.setItem('user',JSON.stringify(dataToSet))
-                await setItem('users',dataToSet)
-                this.$router.push('/home')
-
-            }
+            isUniqueUser(data).then(data=>{
+                if(data.length===0){
+                    localStorage.setItem('user',JSON.stringify(dataToSet))
+                    setItem('users',dataToSet).then(()=>this.$router.push('/home'))
+                }
+            })
         },
         handleLogin(email,password){
             loginQuery(email,password).then(data=>{

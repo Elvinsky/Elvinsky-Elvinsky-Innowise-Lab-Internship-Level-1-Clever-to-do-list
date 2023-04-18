@@ -1,8 +1,9 @@
 <template>
-  <div class="todo-item">
+  <div
+    class="todo-item"
+    @click="onDone"
+  >
     <h2>{{ title }}</h2>
-    <p>{{ content }}</p>
-    <small>{{ id }}</small>
   </div>
 </template>
 
@@ -30,18 +31,24 @@ export default {
             default: 0,
         }
     },
-    data(){
-        return{}
+    emits:['on-done'],
+    methods:{
+        onDone(){
+            this.$emit('on-done',{id:this.id,done:this.done})
+        }
     }
 }
 </script>
 <style scoped>
 .todo-item{
+    margin-left: 2em;
     display: flex;
-    flex-direction: column;
-    gap: 0.4em;
-    align-items: start;
-    justify-content: start;
-}
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
+    padding: 0.6em;
+    background-color: rgba(255, 166, 0, 0.386);
+    border-radius: 8px;
+}
 </style>

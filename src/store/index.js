@@ -30,6 +30,9 @@ export default createStore({
         SET_TODOS(state, todos) {
             state.todos = todos;
         },
+        SET_USER(state,user){
+            state.user=user
+        },
         ADD_TODO(state, todo) {
             state.todos.push(todo);
         },
