@@ -6,6 +6,7 @@ import TestComponent from './components/TestComponent.vue'
 import RegistrationPage from './components/RegistrationPage.vue'
 import LoginPage from './components/LoginPage.vue'
 import HomePage from './components/HomePage.vue'
+import TodoView from './components/TodoView.vue'
 const app = createApp(App);
 const router = createRouter({
     history: createWebHistory(),
@@ -34,6 +35,12 @@ const router = createRouter({
                 if(user === null) next({name:'login'})
                 next()
             }
+        },
+        {
+            name:'todoDetails',
+            path:'/todos/:id',
+            props:true,
+            component:TodoView
         }
     ],
     linkActiveClass:'active'

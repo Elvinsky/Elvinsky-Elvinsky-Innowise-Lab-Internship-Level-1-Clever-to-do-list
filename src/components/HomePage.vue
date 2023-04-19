@@ -12,8 +12,44 @@
     <div class="todos-wrapper">
       <TodosCollection
         :user="user"
-        :todos="todos"
+        :day="day"
+        :month="month"
       />
+    </div>
+    <div
+      class="add-button"
+      @click="openEditor"
+    >
+      Add Todo
+    </div>
+    <div
+      v-if="addOpened"
+      class="add-window"
+      @submit.prevent
+    >
+      <input
+        id="title"
+        v-model="title"
+        name="title"
+        type="text"
+        placeholder="Title"
+      >
+      <input
+        id="content"
+        v-model="content"
+        name="title"
+        type="text"
+        placeholder="Content"
+      >
+      <input
+        id="date"
+        name="date"
+        type="date"
+        @change="onDateChange($event)"
+      >
+      <button @click="addTodo">
+        Add
+      </button>
     </div>
   </section>
 </template>
@@ -21,14 +57,18 @@
 <script>
 import CalendarBar from './CalendarBar.vue';
 import TodosCollection from './TodosCollection.vue';
-import { getTodosByDay } from '@/scripts/dbScripts/queries';
+import { setItem } from '@/scripts/dbScripts/crudApi';
 export default {
     components: { CalendarBar, TodosCollection },
     data() {
         return {
             day:'14',
             todos:{},
-            month:'04'
+            month:'04',
+            addOpened:false,
+            title:'',
+            content:'',
+            timestamp:''
         };
     },
     computed:{
@@ -36,22 +76,30 @@ export default {
             return JSON.parse(localStorage.getItem('user'))
         }
     },
-    watch:{
-        day(){
-            getTodosByDay(new Date('2023-04-'+this.day),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
-        },
-        month(){
-            getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
-        }
-    },
-    created() {
-        getTodosByDay(new Date('2023-'+this.month+'-14'),'/users/'+this.user.id+'/todos/').then(data=>this.todos=data)
-    },
     methods:{
         handleChangeDate(day,month){
             this.day=day;
             this.month=month
+        },
+        openEditor(){
+            this.addOpened=!this.addOpened
+        },
+        addTodo(){
+            if(this.title.length===0||this.content.length===0||this.timestamp.length===0){
+                return
+            }
+            const data={
+                content:this.content,
+                date:this.timestamp,
+                done:false,
+                name:this.title
+            }
+            setItem(`/users/${this.user.id}/todos`,data)
+        },
+        onDateChange(e){
+            this.timestamp=e.target.valueAsNumber;
         }
+        
     }
     
 }
@@ -79,5 +127,25 @@ section{
 }
 .todos-wrapper{
   align-self: start;
+}
+.add-button{
+  padding: 0.4em;
+  background-color: rgba(0, 255, 0, 0.527);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.add-window{
+  display: flex;
+  flex-direction: column;
+  gap: 1.3em;
+  margin-top: 1.7em;
+}
+.add-window input{
+  padding: 0.4em;
+  font-size: 1em;
+}
+.add-window button{
+  padding: 0.4em;
+  background-color: rgba(0, 255, 0, 0.527);
 }
 </style>

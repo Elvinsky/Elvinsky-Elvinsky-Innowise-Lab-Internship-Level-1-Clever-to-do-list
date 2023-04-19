@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-len
-import{ collection, getDocs, addDoc, deleteDoc, setDoc, doc } from 'firebase/firestore/lite';
+import{ collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore/lite';
 import { db } from '@/firebase';
 export async function getItems(doc) {
     const itemsCol = collection(db, doc);
@@ -7,23 +7,21 @@ export async function getItems(doc) {
     const itemList = itemSnapshot.docs.map(doc => doc.data());
     return itemList;
 }
-export async function setItem(item,data){
-    const ref = collection(db,item);
-    let uid=''
-    addDoc(ref,data).then(docRef=>{
-        uid = docRef._key.path.segments[1];
-        updateItem(db,item,uid,{...data,id:uid})
-    })
+export async function setItem(item, data) {
+    const ref = collection(db, item);
+    const docRef = await addDoc(ref, data);
+    const uid = docRef.id;
+    await updateDoc(doc(db, item, uid), { ...data, id: uid });
 }
 
 export async function updateItem(item, itemId, newData) {
     const itemRef = doc(db, item, itemId.toString());
-    await setDoc(itemRef, newData, { merge: true });
+    await updateDoc(itemRef, newData);
 }
 
 
-export async function deleteItem(db,doc, itemId) {
-    const itemRef = doc(db, doc, itemId);
+export async function deleteItem(collName, itemId) {
+    const itemRef = doc(db, collName, itemId);
     await deleteDoc(itemRef);
     console.log('Document deleted with id ', itemId);
 }

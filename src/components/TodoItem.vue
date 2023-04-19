@@ -1,8 +1,15 @@
 <template>
   <div
-    class="todo-item"
-    @click="onDone"
+    :class="done?'done todo-item':'todo-item'"
+    @click.stop="handleViewDetails"
   >
+    <input
+      id="done"
+      type="checkbox"
+      name="done"
+      :checked="done"
+      @click.stop="onDone"
+    >
     <h2>{{ title }}</h2>
   </div>
 </template>
@@ -35,6 +42,9 @@ export default {
     methods:{
         onDone(){
             this.$emit('on-done',{id:this.id,done:this.done})
+        },
+        handleViewDetails(){
+            this.$router.push(`/todos/${this.id}`)
         }
     }
 }
@@ -46,9 +56,16 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    gap: 1.3em;
     padding: 0.6em;
     background-color: rgba(255, 166, 0, 0.386);
     border-radius: 8px;
 }
+input{
+    transform: scale(1.4);
+}
+.done{
+    background-color: rgba(128, 128, 128, 0.574);
+}
+
 </style>
