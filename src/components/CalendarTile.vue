@@ -1,5 +1,8 @@
 <template>
-  <div :class="day==='SUN'?'weekend tile':'tile'">
+  <div
+    :class="day==='SUN'?'weekend tile':'tile'"
+    @click="onClick"
+  >
     {{ day }}
   </div>
 </template>
@@ -11,23 +14,18 @@ export default {
     props:['timestamp'],
     data() {
         return {
-            // startDay: '2023-04-10',
-            // currentMonth: '04',
-            // daysInARow: 7,
-            // timestamps:[],
             daysToCompare:['SUN','MON','TUE','WED','THU','FRI','SAT'],
             day:''
         };
     },
     mounted(){
-        // let curDate = new Date(this.startDay)
-        // for(let step = 0;step<this.daysInARow;step++){
-        //     this.timestamps.push(curDate.getTime())
-        //     curDate.setDate(curDate.getDate()+1)
-        //     console.log(this.timestamps[step],this.daysToCompare[new Date(this.timestamps[step]).getDay()] );
-        // }
         this.day=this.daysToCompare[new Date(this.timestamp).getDay()]
     },
+    methods:{
+        onClick(){
+            this.$emit('on-click',this.timestamp)
+        }
+    }
 }
 </script>
 

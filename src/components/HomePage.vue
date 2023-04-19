@@ -77,9 +77,10 @@ export default {
         }
     },
     methods:{
-        handleChangeDate(day,month){
-            this.day=day;
-            this.month=month
+        handleChangeDate(time){
+            this.day=new Date(time).getDate().toString();
+            this.month=(new Date(time).getMonth()+1).toString()
+            console.log(this.day,this.month);
         },
         openEditor(){
             this.addOpened=!this.addOpened

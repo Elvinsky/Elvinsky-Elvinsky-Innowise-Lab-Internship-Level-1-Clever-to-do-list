@@ -16,6 +16,7 @@
       v-for="(item,idx) in timestamps"
       :key="item"
       :timestamp="timestamps[idx]"
+      @on-click="onDateChange"
     />
   </div>
 </template>
@@ -44,8 +45,8 @@ export default {
         }
     },
     methods: {
-        onDateChange(event) {
-            this.$emit('change-date', event.target.id, '04');
+        onDateChange(time) {
+            this.$emit('change-date', time);
         }
     }
 }
