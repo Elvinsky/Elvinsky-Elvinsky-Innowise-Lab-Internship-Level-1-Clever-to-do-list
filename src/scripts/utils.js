@@ -18,3 +18,18 @@ export const isValidCreds =(data)=>{
 export const isUniqueUser = async (data)=>{
     return data = await whereQuery(db,'users','username',data.name)
 }
+export const statusCheck=(todos)=>{
+    const flags={
+        done:false,
+        undone:false
+    }
+    for(let i=0;i<todos.length;i++){
+        if(todos[i].done){
+            flags.done=true;
+        }
+        else{
+            flags.undone=true
+        }
+    }
+    return flags
+}

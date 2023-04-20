@@ -8,7 +8,9 @@
         Taskker
       </h1>
     </div>
-    <CalendarBar @change-date="handleChangeDate" />
+    <CalendarBar
+      @change-date="handleChangeDate"
+    />
     <div class="todos-wrapper">
       <TodosCollection
         :user="user"
@@ -63,7 +65,6 @@ export default {
     data() {
         return {
             day:'14',
-            todos:{},
             month:'04',
             addOpened:false,
             title:'',
@@ -79,8 +80,7 @@ export default {
     methods:{
         handleChangeDate(time){
             this.day=new Date(time).getDate().toString();
-            this.month=(new Date(time).getMonth()+1).toString()
-            console.log(this.day,this.month);
+            this.month=(new Date(time).getMonth()).toString()
         },
         openEditor(){
             this.addOpened=!this.addOpened
