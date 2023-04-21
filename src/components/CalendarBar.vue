@@ -21,13 +21,13 @@
 
 <script>
 import CalendarTile from './CalendarTile.vue';
+const DAY_TIMESTAMP = 86400000 //ms
 export default {
     components: { CalendarTile },
     emits: ['change-date'],
     data() {
         return {
             startDay: '2023-05-10',
-            currentMonth: '05',
             daysInARow: 7,
             timestamps:[],
             daysToCompare:['SUN','MON','TUE','WED','THU','FRI','SAT']
@@ -47,17 +47,18 @@ export default {
             this.$emit('change-date', time);
         },
         onDateScroll(direction){
-            let curDate = new Date(this.startDay);
-            if(direction ==='add'){
-                curDate.setDate(curDate.getDate() - this.daysInARow)
-            }
-            this.startDay=curDate
-            const timestampsTemp=[]
-            for(let step = 0;step<this.daysInARow;step++){
-                timestampsTemp.push(curDate.getTime())
-                curDate.setDate(curDate.getDate()+1)
-            }
-            this.timestamps=timestampsTemp
+            const newDatesTimestamps = this.timestamps.map(el=>{
+                if(direction==='add'){
+                    let tmpTimestamp = el+(DAY_TIMESTAMP*7);
+                    return new Date(tmpTimestamp).getTime()
+                }
+                else{
+                    let tmpTimestamp = el-(DAY_TIMESTAMP*7);
+                    return new Date(tmpTimestamp).getTime()
+                }
+                
+            })
+            this.timestamps=newDatesTimestamps
         }
     },
 }
