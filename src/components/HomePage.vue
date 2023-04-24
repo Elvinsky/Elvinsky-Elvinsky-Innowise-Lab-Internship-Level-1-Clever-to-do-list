@@ -61,9 +61,9 @@
 </template>
 
 <script>
-import CalendarBar from '../components/Calendar/CalendarBar.vue';
-import TodosCollection from '../components/Todos/TodosCollection.vue';
-import { setItem } from '@/scripts/dbScripts/crudApi';
+import CalendarBar from './Calendar/CalendarBar.vue';
+import TodosCollection from './Todos/TodosCollection.vue'
+import { setItem } from '../scripts/dbScripts/crudApi';
 export default {
     components: { CalendarBar, TodosCollection },
     data() {

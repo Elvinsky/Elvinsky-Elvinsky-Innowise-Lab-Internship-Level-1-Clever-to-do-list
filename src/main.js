@@ -4,7 +4,7 @@ import store from './store';
 import {createRouter, createWebHistory} from 'vue-router'
 import RegistrationPage from './components/Auth/RegistrationPage.vue'
 import LoginPage from './components/Auth/LoginPage.vue'
-import HomePage from './Home/HomePage.vue'
+import HomePage from './components/HomePage.vue'
 import TodoView from './components/Todos/TodoView.vue'
 const app = createApp(App);
 const router = createRouter({
