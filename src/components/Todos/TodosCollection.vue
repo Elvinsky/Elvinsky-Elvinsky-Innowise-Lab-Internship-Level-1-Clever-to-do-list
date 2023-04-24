@@ -52,9 +52,13 @@ export default {
                 const todo = (data.find(el=>el.id===dataobj.id))
                 const stateEl = this.todos.find(el=>el.id===dataobj.id)
                 stateEl.done=!stateEl.done
-                updateItem(`/users/${this.user.id}/todos`,todo.id,{...todo,done:!dataobj.done})
+                updateItem(`/users/${this.user.id}/todos`,todo.id,{...todo,done:!dataobj.done}).then(()=>this.triggerUpdate())
             })
-        }
+
+        }, 
+        triggerUpdate(){
+            this.$emit('trigger-update')
+        },
     }
 }
 </script>
@@ -63,8 +67,8 @@ export default {
 .todo-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: start;
+    justify-content: start;
     gap: 2em;
     border-width: 1px;
     border-color: black;

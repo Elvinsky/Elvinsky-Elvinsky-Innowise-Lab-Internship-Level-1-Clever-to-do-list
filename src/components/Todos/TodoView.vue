@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {getItems, deleteItem, updateItem} from '../scripts/dbScripts/crudApi.js'
+import {getItems, deleteItem, updateItem} from '@/scripts/dbScripts/crudApi'
 
 export default {
     emits:['on-delete'],
@@ -166,10 +166,11 @@ section{
     padding: 0.7em;
     background-color: rgba(0, 157, 255, 0.425);
     cursor: pointer;
-
+    border-radius: 5px;
 }
 .button-wrapper div:hover{
     background-color: rgba(0, 157, 255, 0.704);
+    
 }
 
 .edit-modal{

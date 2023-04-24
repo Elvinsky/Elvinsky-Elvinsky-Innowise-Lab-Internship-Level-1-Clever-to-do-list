@@ -9,6 +9,7 @@
       </h1>
     </div>
     <CalendarBar
+      :key="componentKey"
       @change-date="handleChangeDate"
     />
     <div class="todos-wrapper">
@@ -16,6 +17,7 @@
         :user="user"
         :day="day"
         :month="month"
+        @trigger-update="handleUpdate"
       />
     </div>
     <div
@@ -49,16 +51,18 @@
         type="date"
         @change="onDateChange($event)"
       >
-      <button @click="addTodo">
-        Add
-      </button>
+      <div>
+        <button @click="addTodo">
+          Add
+        </button>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-import CalendarBar from './CalendarBar.vue';
-import TodosCollection from './TodosCollection.vue';
+import CalendarBar from '../components/Calendar/CalendarBar.vue';
+import TodosCollection from '../components/Todos/TodosCollection.vue';
 import { setItem } from '@/scripts/dbScripts/crudApi';
 export default {
     components: { CalendarBar, TodosCollection },
@@ -69,7 +73,8 @@ export default {
             addOpened:false,
             title:'',
             content:'',
-            timestamp:''
+            timestamp:'',
+            componentKey:0
         };
     },
     computed:{
@@ -80,7 +85,12 @@ export default {
     methods:{
         handleChangeDate(time){
             this.day=new Date(time).getDate().toString();
-            this.month=(new Date(time).getMonth()).toString()
+            this.month=(new Date(time).getMonth()+1).toString();
+            localStorage.setItem('timestamp',JSON.stringify(
+                {
+                    timestamp:time
+                }
+            )) 
         },
         openEditor(){
             this.addOpened=!this.addOpened
@@ -95,12 +105,22 @@ export default {
                 done:false,
                 name:this.title
             }
-            setItem(`/users/${this.user.id}/todos`,data)
+            setItem(`/users/${this.user.id}/todos`,data).then(()=>{
+                this.title='',
+                this.content='',
+                this.timestamp='',
+                this.addOpened=false
+                this.handleUpdate()
+
+            })
         },
         onDateChange(e){
             this.timestamp=e.target.valueAsNumber;
+            this.handleUpdate()
+        },
+        handleUpdate(){
+            this.componentKey+=1
         }
-        
     }
     
 }
@@ -119,6 +139,9 @@ section{
 
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.405);
     border-radius: 5px;
+
+    transition: all;
+    transition-duration: 200ms;
 }
 .header-wrapper{
     align-self: start;
@@ -134,6 +157,9 @@ section{
   background-color: rgba(0, 255, 0, 0.527);
   border-radius: 8px;
   cursor: pointer;
+
+  transition: all;
+  transition-duration: 200ms;
 }
 .add-window{
   display: flex;
@@ -148,5 +174,12 @@ section{
 .add-window button{
   padding: 0.4em;
   background-color: rgba(0, 255, 0, 0.527);
+
+  transition: all;
+  transition-duration: 200ms;
+}
+
+.add-window button:hover{
+  background-color: rgba(0, 188, 0, 0.527);
 }
 </style>

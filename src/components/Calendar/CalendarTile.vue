@@ -1,13 +1,22 @@
 <template>
   <section>
     <div
-      :class="daysToCompare[new Date(timestamp).getDay()]==='SUN'?'weekend tile':'tile'"
+      :class="daysToCompare[new Date(timestamp).getDay()]==='SUN'?
+        activeFlag?
+          'weekend active tile' : 'weekend tile'
+        :
+        activeFlag?
+          'tile active' : 'tile'
+      "
       @click="onClick"
     >
       {{ daysToCompare[new Date(timestamp).getDay()] }}
-      {{ new Date(timestamp).getDate() }}.{{ new Date(timestamp).getMonth() }}
-      <!-- {{ new Date(timestamp).toLocaleDateString() }} -->
+      {{ new Date(timestamp).getDate() }}
     </div>
+    <div
+      v-if="!flags.done && !flags.undone"
+      class="filler"
+    />
     <div class="indicators">
       <div
         v-if="flags.done"
@@ -22,30 +31,31 @@
 </template>
 
 <script>
-import { getTodosByDay } from '@/scripts/dbScripts/queries';
-import {statusCheck} from '../scripts/utils'
+import { getTodosByDay } from '@/scripts/dbScripts/queries.js';
+import {statusCheck} from '@/scripts/utils/utils.js'
 export default {
     // eslint-disable-next-line vue/require-prop-types
-    props:['timestamp'],
+    props:['timestamp','active'],
     data() {
         return {
             daysToCompare:['SUN','MON','TUE','WED','THU','FRI','SAT'],
             user:JSON.parse(localStorage.getItem('user')),
+            activeFlag:false,
             todos:[],
             flags:{}
         };
     },
     mounted(){
-        
-        getTodosByDay(new Date(`2023-${new Date(this.timestamp).getMonth()}-${new Date(this.timestamp).getDate()}`),'/users/'+this.user.id+'/todos/').then(data=>{
+        getTodosByDay(new Date(`2023-${new Date(this.timestamp).getMonth()+1}-${new Date(this.timestamp).getDate()}`),'/users/'+this.user.id+'/todos/').then(data=>{
             this.todos=data
             this.flags=statusCheck(this.todos)
         })
-
+        this.activeFlag=this.active===this.timestamp
     },
     methods:{
         onClick(){
             this.$emit('on-click',this.timestamp)
+            this.activeFlag=this.active===this.timestamp
         }
     },
 }
@@ -59,20 +69,26 @@ section{
   justify-content: center;
 }
 .tile.weekend{
-  background-color: rgba(255, 0, 0, 0.612);
+    border-color: rgba(255, 0, 0, 0.651);
+
+}
+.active{
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
 }
 .tile{
   padding: 1em;
-  background-color: rgba(127, 255, 212, 0.508);
   cursor: pointer;
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0);
+  border-color: rgb(127, 255, 212);
+  border-radius: 8px;
   transition: all;
   transition-duration: 200ms;
 }
 .tile:hover{
-  border-width: 1px;
+  border-width: 2px;
   border-style: solid;
   border-color: black;
 }
@@ -80,6 +96,9 @@ section{
   display: flex;
   gap: 1em;
   margin-top: 0.2em;
+}
+.filler{
+  height: 8px
 }
 .indicators div{
   border-radius: 50%;

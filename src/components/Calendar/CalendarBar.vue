@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-wrapper">
     <img
-      src="../assets/icons/left-arrow.png"
+      src="@/assets/icons/left-arrow.png"
       style="width:30px"
       @click="onDateScroll('sub')"
     >
@@ -9,10 +9,11 @@
       v-for="(item,idx) in timestamps"
       :key="item"
       :timestamp="timestamps[idx]"
+      :active="activetimestamp"
       @on-click="onDateChange"
     />
     <img
-      src="../assets/icons/right-arrow.png"
+      src="@/assets/icons/right-arrow.png"
       style="width:30px"
       @click="onDateScroll('add')"
     >
@@ -20,31 +21,34 @@
 </template>
 
 <script>
-import CalendarTile from './CalendarTile.vue';
+import CalendarTile from '../Calendar/CalendarTile.vue';
 const DAY_TIMESTAMP = 86400000 //ms
 export default {
     components: { CalendarTile },
     emits: ['change-date'],
     data() {
         return {
-            startDay: '2023-05-10',
+            startDay: new Date().toISOString().slice(0, 10),
             daysInARow: 7,
             timestamps:[],
+            activetimestamp:'',
             daysToCompare:['SUN','MON','TUE','WED','THU','FRI','SAT']
         };
     },
     created(){
-        let curDate = new Date(this.startDay)
+        let curDate = new Date(this.startDay);
         const timestampsTemp=[]
         for(let step = 0;step<this.daysInARow;step++){
             timestampsTemp.push(curDate.getTime())
             curDate.setDate(curDate.getDate()+1)
         }
         this.timestamps=timestampsTemp
+        this.activetimestamp=curDate.setHours(0,0,0,0)
     },
     methods: {
         onDateChange(time) {
             this.$emit('change-date', time);
+            this.activetimestamp=time
         },
         onDateScroll(direction){
             const newDatesTimestamps = this.timestamps.map(el=>{

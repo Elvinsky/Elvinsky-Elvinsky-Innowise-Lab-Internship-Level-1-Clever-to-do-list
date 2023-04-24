@@ -1,20 +1,16 @@
 <template>
   <section>
-    <h2>Registration</h2>
-    <form @submit.prevent>
-      <input
-        id="name"
-        v-model="name"
-        placeholder="username"
-        name="name"
-        type="text"
-      >
+    <h2>Login</h2>
+    <form
+      :class="error?'error':''"
+      @submit.prevent
+    >
       <input
         id="email"
         v-model="email"
         placeholder="e-mail"
         name="email"
-        type="email"
+        type="text"
       >
       <input
         id="password"
@@ -23,22 +19,18 @@
         name="password"
         type="password"
       >
-      <input
-        id="repeatPassword"
-        v-model="repeatPassword"
-        placeholder="repeat password"
-        name="repeatPassword"
-        type="password"
-      >
+      <div v-if="error">
+        Error! Incorrect creds
+      </div>
       <div class="actions">
         <button @click="submit">
-          Submit
+          Login
         </button>
         <RouterLink
-          to="/login"
+          to="/register"
           class="link"
         >
-          Already have an account?
+          Noe yet have an account?
         </RouterLink>
       </div>
     </form>
@@ -46,33 +38,36 @@
 </template>
 
 <script>
-import {isValidCreds} from '../scripts/utils.js'
-export default {    
-    emits:['submit-creds'],                
+import { loginQuery } from '@/scripts/dbScripts/queries';
+export default {
     data(){
         return{
-            name:'',
             email:'',
             password:'',
-            repeatPassword:''
+
+            error:false
         }
     },
     methods:{
         submit(){
-            const data={
-                name:this.name,
-                email:this.email,
-                password:this.password,
-                repPassword:this.repeatPassword
-            }
-            if(isValidCreds(data)) this.$emit('submit-creds',data)
-            else{
-                this.name='',
-                this.email='',
-                this.password=''
-                this.repeatPassword=''
-                return
-            }
+            loginQuery(this.email,this.password).then(data=>{
+                if(data.length!==1){
+                    this.error=true
+                    this.email='',
+                    this.password=''
+                    return
+                }
+                else{
+                    const dataToSet ={
+                        username:data[0].username,
+                        email:data[0].email,
+                        password:data[0].password,
+                        id:data[0].id
+                    }
+                    localStorage.setItem('user',JSON.stringify(dataToSet))
+                    this.$router.push('/home')
+                }
+            })
         }
     }
 }
@@ -92,6 +87,11 @@ form{
   align-items: center;
   justify-content: center;
   gap: 0.6em;
+}
+form.error input{
+  border-color: red;
+  border-width: 1px;
+  border-style: solid;
 }
 form button{
   align-self: flex-start;

@@ -1,9 +1,9 @@
 import { collection, query, where, getDocs,and,or } from 'firebase/firestore/lite';
 import { db } from '@/firebase';
-export const whereQuery = async (doc, field, value) => {
-    const q = query(collection(db, doc), where(field, '==', value));
+export const whereQuery = async (docinf, field, value) => {
+    const q = query(collection(db, docinf), where(field, '==', value));
     const querySnapshot = await getDocs(q);
-    const results = querySnapshot.docs.map((doc) => doc.data());
+    const results = querySnapshot.docs.map((docinf) => docinf.data());
     return results;
 };
 export const loginQuery = async (email,pass) => {

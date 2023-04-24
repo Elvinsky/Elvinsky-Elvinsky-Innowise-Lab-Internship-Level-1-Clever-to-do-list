@@ -2,11 +2,10 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import store from './store';
 import {createRouter, createWebHistory} from 'vue-router'
-import TestComponent from './components/TestComponent.vue'
-import RegistrationPage from './components/RegistrationPage.vue'
-import LoginPage from './components/LoginPage.vue'
-import HomePage from './components/HomePage.vue'
-import TodoView from './components/TodoView.vue'
+import RegistrationPage from './components/Auth/RegistrationPage.vue'
+import LoginPage from './components/Auth/LoginPage.vue'
+import HomePage from './Home/HomePage.vue'
+import TodoView from './components/Todos/TodoView.vue'
 const app = createApp(App);
 const router = createRouter({
     history: createWebHistory(),
@@ -47,5 +46,4 @@ const router = createRouter({
 })
 app.use(store);
 app.use(router)
-app.component('TestComponent',TestComponent)
 app.mount('#app');

@@ -1,5 +1,4 @@
-import { whereQuery } from './dbScripts/queries'
-import { db } from '@/firebase'
+import { whereQuery } from '../dbScripts/queries'
 export const isValidCreds =(data)=>{
     if(data.name.length>0 && data.name.length<=80){
         if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(data.email) && data.email.length<=80){
@@ -16,7 +15,7 @@ export const isValidCreds =(data)=>{
     return false
 }
 export const isUniqueUser = async (data)=>{
-    return data = await whereQuery(db,'users','username',data.name)
+    return data = await whereQuery('users','username',data.name)
 }
 export const statusCheck=(todos)=>{
     const flags={
